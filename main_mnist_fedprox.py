@@ -17,7 +17,7 @@ from sklearn.metrics import classification_report, confusion_matrix, precision_r
 from sklearn.preprocessing import MinMaxScaler
 from collections import Iterable  # < py38
 import copy
-from net_fewc import CNNMnist,CNNFashion_Mnist
+from net_fewc import CNNMnist
 import logging
 import gzip
 import os
