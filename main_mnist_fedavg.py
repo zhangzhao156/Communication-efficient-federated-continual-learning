@@ -477,32 +477,23 @@ if __name__ == '__main__':
 
     trans_mnist = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     ### MNIST
-    # dataset_train = DealDataset('./data/MNIST/raw', "train-images-idx3-ubyte.gz", "train-labels-idx1-ubyte.gz",
-    #                             transform=trans_mnist)
-    # dataset_test = DealDataset('./data/MNIST/raw', "t10k-images-idx3-ubyte.gz", "t10k-labels-idx1-ubyte.gz",
-    #                            transform=trans_mnist)
-    dataset_train = DealDataset('./fashion', "train-images-idx3-ubyte.gz", "train-labels-idx1-ubyte.gz",
+    dataset_train = DealDataset('./data/MNIST/raw', "train-images-idx3-ubyte.gz", "train-labels-idx1-ubyte.gz",
                                 transform=trans_mnist)
-    dataset_test = DealDataset('./fashion', "t10k-images-idx3-ubyte.gz", "t10k-labels-idx1-ubyte.gz",
+    dataset_test = DealDataset('./data/MNIST/raw', "t10k-images-idx3-ubyte.gz", "t10k-labels-idx1-ubyte.gz",
                                transform=trans_mnist)
 
-    # save_global_model = 'save_model.pkl'
 
-    # # IID Data
-    # dict_clients = iid(dataset_train, num_users=num_clients)
-    # dict_clients = mnist_noniid3(dataset_train, num_users=num_clients)
-    dict_clients = mnist_noniid2(dataset_train, num_users=num_clients)
-    # dict_clients = mnist_noniid1(dataset_train, num_users=num_clients)
 
-    # net_global = CNNMnist(lamda=Lamda).to(device) #.double()
-    net_global = CNNFashion_Mnist(lamda=Lamda).to(device)  # .double()
+    dict_clients = mnist_noniid1(dataset_train, num_users=num_clients)
+
+    net_global = CNNMnist(lamda=Lamda).to(device) #.double()
+
     
     # for n, p in net_global.named_parameters():
     #   p.data.zero_()
     w_glob = net_global.state_dict()
     # print(w_glob)
-    crit = torch.nn.CrossEntropyLoss()#torch.DoubleTensor weight=torch.FloatTensor([1, 1.2, 1.2, 1.2, 3]).to(device)
-    # optimizer = torch.optim.SGD(net_global.parameters(), lr=0.001, momentum=0.5)
+    crit = torch.nn.CrossEntropyLoss()
     net_global.train()
 
     for interation in range(T):
@@ -513,11 +504,7 @@ if __name__ == '__main__':
             net = copy.deepcopy(net_global).to(device)
             # crit = torch.nn.CrossEntropyLoss()
             net.train()
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.01, momentum=0.5)
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9) ### IID
-            opt_net = torch.optim.SGD(net.parameters(), lr=0.0001, momentum=0.7) ##, momentum=0.5
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.7)  ##, momentum=0.5
+            opt_net = torch.optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
 
             print('interation', interation, 'client', client)
             idx_traindataset = DatasetSplit(dataset_train, dict_clients[client])
