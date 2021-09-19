@@ -475,7 +475,6 @@ if __name__ == '__main__':
     w_glob = net_global.state_dict()
     # print(w_glob)
     crit = torch.nn.CrossEntropyLoss()#torch.DoubleTensor weight=torch.FloatTensor([1, 1.2, 1.2, 1.2, 3]).to(device)
-    # optimizer = torch.optim.SGD(net_global.parameters(), lr=0.001, momentum=0.5)
     net_global.train()
 
     for interation in range(T):
@@ -486,11 +485,7 @@ if __name__ == '__main__':
             net = copy.deepcopy(net_global).to(device)
             # crit = torch.nn.CrossEntropyLoss()
             net.train()
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.01, momentum=0.5)
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9) ## IID
-            opt_net = torch.optim.SGD(net.parameters(), lr=0.0001, momentum=0.7)  ##, momentum=0.5
-            # opt_net = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.7)  ##, momentum=0.5
+            opt_net = torch.optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
 
             print('interation', interation, 'client', client)
             idx_traindataset = DatasetSplit(dataset_train, dict_clients[client])
